@@ -1,7 +1,3 @@
-// utils.js
-// Funciones utilitarias para el generador de tablas.
-// Comentarios en español para facilitar el mantenimiento.
-
 export function mezclar(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));

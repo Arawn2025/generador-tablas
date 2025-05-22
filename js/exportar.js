@@ -1,8 +1,8 @@
-// exportar.js
-// Funciones para exportar la tabla generada a PDF.
-// Comentarios en español para facilitar el mantenimiento.
-
 export function descargarPDF() {
+  // Oculta el mensaje de ayuda al exportar
+  const mensaje = document.querySelector('.mensaje-edicion');
+  if (mensaje) mensaje.style.display = 'none';
+
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation: 'landscape', unit: 'px', format: 'a4' });
 

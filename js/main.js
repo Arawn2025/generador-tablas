@@ -1,7 +1,3 @@
-// main.js
-// Archivo principal de control de eventos y lógica de interacción para GeneradorTablasWeb.
-// Comentarios agregados en español para facilitar la comprensión y mantenimiento.
-
 import { generarTabla, abrirSelector, inicializarSelector } from './generador.js';
 import { descargarPDF } from './exportar.js';
 

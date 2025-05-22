@@ -1,7 +1,3 @@
-// generador.js
-// Funciones para generar y manejar las tablas de multiplicar en diferentes estilos.
-// Comentarios en español para facilitar el mantenimiento.
-
 import { mezclar, cargarCartas } from './utils.js';
 
 let celdaActiva = null;
