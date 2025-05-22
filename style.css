@@ -230,26 +230,3 @@ h2 {
 
 
 /* Contenedor para que el mensaje y la tabla estén siempre en columna */
-
-
-#selector {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
-  gap: 8px;
-  justify-items: center;
-  align-items: center;
-  max-width: 460px;
-  margin: 0 auto;
-  padding: 12px 0;
-  background: #fafafa;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px #0002;
-  z-index: 100;
-}
-
-
-/* Borde azul para imágenes duplicadas */
-img.duplicada {
-  border: 3px solid #1976d2;
-  box-sizing: border-box;
-}

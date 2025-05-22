@@ -50,7 +50,7 @@ function generarSelector(celda) {
   const total = estilo === 'extendida' ? 108 : 54;
   const tabla = celda?.closest('.tabla');
   const usadas = Array.from(tabla?.querySelectorAll('img') || [])
-    .map(e => e.getAttribute('src'))
+    .map(e => e.src)
     .filter(src => !src.includes('blanco.png'));
 
   for (let i = 1; i <= total; i++) {
