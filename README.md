@@ -14,9 +14,19 @@ GeneradorTablasWeb es una aplicación web sencilla para crear, visualizar y expo
 2. Abre el archivo `index.html` en tu navegador.
 3. Selecciona el tamaño y estilo de tabla, genera la tabla y si deseas, descárgala en PDF.
 
+🖨️ Para evitar recortes al imprimir (Tamaño Carta)
+
+Cuando abras el PDF para imprimir, asegúrate de:
+
+En Acrobat, Chrome o Edge: seleccionar “Tamaño real” o “100%”
+
+NO uses “Ajustar al área imprimible” o “Encajar”, porque eso puede forzar márgenes adicionales o escalar inesperadamente
+
+
+
 ## Créditos
 
-Desarrollado por [Arawn].
+Desarrollado por [Arawn] y ChatGPT.
 
 ## Aviso de uso
 
