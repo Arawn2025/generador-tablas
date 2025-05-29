@@ -1,64 +1,77 @@
+
 export function descargarPDF() {
-  // Oculta el mensaje de ayuda al exportar
   const mensaje = document.querySelector('.mensaje-edicion');
   if (mensaje) mensaje.style.display = 'none';
 
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation: 'landscape', unit: 'px', format: 'a4' });
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'px', format: 'letter' });
 
-  const titulo = ""; // Input eliminado
   const originalTablas = document.getElementById('tablas');
-
-  // Cerrar selector antes de capturar
   const selector = document.getElementById('selector');
-  selector.style.display = 'none';
+  if (selector) selector.style.display = 'none';
   document.body.classList.remove('selector-activo');
 
-  // Clonar #tablas en layout horizontal
-  const clone = originalTablas.cloneNode(true);
-  clone.id = 'tablas-clone';
-  clone.style.display = 'flex';
-  clone.style.flexDirection = 'row';
-  clone.style.gap = '20px';
-  clone.style.justifyContent = 'center';
-  clone.style.alignItems = 'flex-start';
-  clone.style.flexWrap = 'nowrap';
-  clone.style.marginTop = '20px';
-  clone.style.background = 'white';
-  clone.style.padding = '10px';
-  clone.style.width = 'auto';
-
-  // Insertar clon fuera de pantalla y capturarlo
-  const container = document.createElement('div');
-  container.style.position = 'fixed';
-  container.style.top = '-9999px';
-  container.appendChild(clone);
-  document.body.appendChild(container);
-
-  html2canvas(clone, {
+  html2canvas(originalTablas, {
     scale: 2,
     useCORS: true,
-    windowWidth: clone.scrollWidth
+    backgroundColor: '#FFFFFF'
   }).then(canvas => {
-    const imgData = canvas.toDataURL('image/png');
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const imgProps = doc.getImageProperties(imgData);
-    const pdfWidth = pageWidth - 40;
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    const ctx = canvas.getContext("2d");
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const pixels = imageData.data;
 
-    let y = 20;
+    let top = canvas.height, bottom = 0, left = canvas.width, right = 0;
 
-    if (titulo.trim() !== '') {
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(20);
-      doc.text(titulo, pageWidth / 2, y, { align: 'center' });
-      y += 30;
+    for (let y = 0; y < canvas.height; y++) {
+      for (let x = 0; x < canvas.width; x++) {
+        const i = (y * canvas.width + x) * 4;
+        const r = pixels[i], g = pixels[i + 1], b = pixels[i + 2], a = pixels[i + 3];
+        const isWhite = r > 250 && g > 250 && b > 250 && a > 250;
+        if (!isWhite) {
+          if (y < top) top = y;
+          if (y > bottom) bottom = y;
+          if (x < left) left = x;
+          if (x > right) right = x;
+        }
+      }
     }
 
-    doc.addImage(imgData, 'PNG', 20, y, pdfWidth, pdfHeight);
-    doc.save('tablas_loteria.pdf');
+    const width = right - left + 1;
+    const height = bottom - top + 1;
 
-    // Eliminar clon
-    document.body.removeChild(container);
+    const trimmedCanvas = document.createElement("canvas");
+    trimmedCanvas.width = width;
+    trimmedCanvas.height = height;
+    const trimmedCtx = trimmedCanvas.getContext("2d");
+    trimmedCtx.drawImage(canvas, left, top, width, height, 0, 0, width, height);
+
+    const imgData = trimmedCanvas.toDataURL("image/png");
+    const imgProps = doc.getImageProperties(imgData);
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+
+    const margin = 20; // margen fijo en px
+    const usableWidth = pageWidth - 2 * margin;
+    const usableHeight = pageHeight - 2 * margin;
+
+    const imgRatio = imgProps.width / imgProps.height;
+    const pageRatio = usableWidth / usableHeight;
+
+    let imgWidth, imgHeight;
+
+    if (imgRatio > pageRatio) {
+      imgWidth = usableWidth;
+      imgHeight = imgWidth / imgRatio;
+    } else {
+      imgHeight = usableHeight;
+      imgWidth = imgHeight * imgRatio;
+    }
+
+    const xOffset = (pageWidth - imgWidth) / 2;
+    const yOffset = (pageHeight - imgHeight) / 2;
+
+    doc.addImage(imgData, 'PNG', xOffset, yOffset, imgWidth, imgHeight);
+    doc.save("tabla.pdf");
   });
 }
