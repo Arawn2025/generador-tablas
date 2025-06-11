@@ -50,7 +50,7 @@ function generarSelector(celda) {
   const total = estilo === 'extendida' ? 108 : 54;
   const tabla = celda?.closest('.tabla');
   const usadas = Array.from(tabla?.querySelectorAll('img') || [])
-    .map(e => e.src)
+    .map(e => e.getAttribute('src'))
     .filter(src => !src.includes('blanco.png'));
 
   for (let i = 1; i <= total; i++) {
@@ -59,7 +59,7 @@ function generarSelector(celda) {
 
     const img = document.createElement('img');
     img.src = src;
-    if (usadas.includes(location.origin + '/' + src)) {
+    if (usadas.includes(src)) {
       img.classList.add('usada'); // solo filtro visual, se puede hacer clic
     }
     img.onclick = () => {

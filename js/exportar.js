@@ -1,60 +1,37 @@
 export function descargarPDF() {
+  const mensaje = document.querySelector('.mensaje-edicion');
+  if (mensaje) mensaje.style.display = 'none';
+
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation: 'landscape', unit: 'px', format: 'a4' });
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'px', format: 'letter' });
 
-  const titulo = ""; // Input eliminado
-  const originalTablas = document.getElementById('tablas');
-
-  // Cerrar selector antes de capturar
   const selector = document.getElementById('selector');
-  selector.style.display = 'none';
+  if (selector) selector.style.display = 'none';
   document.body.classList.remove('selector-activo');
 
-  // Clonar #tablas en layout horizontal
-  const clone = originalTablas.cloneNode(true);
-  clone.id = 'tablas-clone';
-  clone.style.display = 'flex';
-  clone.style.flexDirection = 'row';
-  clone.style.gap = '20px';
-  clone.style.justifyContent = 'center';
-  clone.style.alignItems = 'flex-start';
-  clone.style.flexWrap = 'nowrap';
-  clone.style.marginTop = '20px';
-  clone.style.background = 'white';
-  clone.style.padding = '10px';
-  clone.style.width = 'auto';
-
-  // Insertar clon fuera de pantalla y capturarlo
-  const container = document.createElement('div');
-  container.style.position = 'fixed';
-  container.style.top = '-9999px';
-  container.appendChild(clone);
-  document.body.appendChild(container);
-
-  html2canvas(clone, {
+  const originalTablas = document.getElementById('contenidoPDF');
+  html2canvas(originalTablas, {
     scale: 2,
-    useCORS: true,
-    windowWidth: clone.scrollWidth
+    useCORS: true
   }).then(canvas => {
     const imgData = canvas.toDataURL('image/png');
     const pageWidth = doc.internal.pageSize.getWidth();
-    const imgProps = doc.getImageProperties(imgData);
-    const pdfWidth = pageWidth - 40;
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-    let y = 20;
-
-    if (titulo.trim() !== '') {
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(20);
-      doc.text(titulo, pageWidth / 2, y, { align: 'center' });
-      y += 30;
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const imgRatio = canvas.width / canvas.height;
+    const usableWidth = pageWidth * 0.95;
+    const usableHeight = pageHeight * 0.95;
+    let imgWidth, imgHeight;
+    if (usableWidth / usableHeight < imgRatio) {
+      imgWidth = usableWidth;
+      imgHeight = imgWidth / imgRatio;
+    } else {
+      imgHeight = usableHeight;
+      imgWidth = imgHeight * imgRatio;
     }
-
-    doc.addImage(imgData, 'PNG', 20, y, pdfWidth, pdfHeight);
-    doc.save('tablas_loteria.pdf');
-
-    // Eliminar clon
-    document.body.removeChild(container);
+    const xOffset = (pageWidth - imgWidth) / 2;
+    const yOffset = (pageHeight - imgHeight) / 2;
+    doc.addImage(imgData, 'PNG', xOffset, yOffset, imgWidth, imgHeight);
+    doc.save("tabla.pdf");
+    if (mensaje) mensaje.style.display = 'block';
   });
 }

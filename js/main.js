@@ -1,4 +1,4 @@
-import { generarTabla, abrirSelector, inicializarSelector } from './generador.js';
+import { generarTabla, abrirSelector } from './generador.js';
 import { descargarPDF } from './exportar.js';
 
 document.getElementById('generarBtn').addEventListener('click', generarTabla);
@@ -7,7 +7,6 @@ document.getElementById('limpiarBtn').addEventListener('click', limpiarTablas);
 
 window.addEventListener('DOMContentLoaded', () => {
   generarTabla();
-  inicializarSelector();
 });
 
 function limpiarTablas() {

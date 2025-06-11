@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <link href="https://fonts.googleapis.com/css2?family=Rye&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Londrina+Solid&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <title>Generador de Tablas</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="config">
+
+
+
     <label>Estilo:</label>
     <select id="estilo">
       <option value="clasica">Clásica</option>
@@ -23,24 +29,63 @@
     <button id="generarBtn">Generar</button>
     <button id="limpiarBtn">Limpiar</button>
     <button id="descargarBtn">Guardar PDF</button>
+<div class="titulo-box" style="margin-top: 1em; text-align: center;">
+  <label for="tituloInput" style="font-weight:600;">Título de la tabla:</label><br>
+  <input type="text" id="tituloInput" placeholder="Ej. Lotería de Juan"
+    style="padding:0.5em; width:80%; max-width:400px; font-family:'Poppins', sans-serif; font-size:1em; margin-top:0.5em;">
+</div>
+
+
+
+
+<div class="mensaje-edicion">
+  👉 Toca una celda para editar la tabla.
+</div>
   </div>
 
   <div class="titulo-container">
     </div>
 
-  <div id="tablas">
+  <div id="contenidoPDF">
+<h2 id="tituloTabla" style=; margin: 4px 0 4px 0;"font-size:20px; margin: 10px 0 10px 0; font-family:\'Poppins\', sans-serif; text-align:center;"></h2>
+
+<div id="tablas">
     <h2></h2>
-    <div id="tabla1" class="tabla"></div>
+    
+
+
+    <div id="contenidoPDF">
+<h2 id="tituloTabla" style=; margin: 4px 0 4px 0;"font-size:20px; margin: 10px 0 10px 0; font-family:\'Poppins\', sans-serif; text-align:center;"></h2>
+
+<div id="tablas">
+<div id="tabla1" class="tabla"></div>
 
     <h2></h2>
-    <div id="tabla2" class="tabla"></div>
+      <div id="tabla2" class="tabla"></div>
+    </div>
   </div>
 
   <script type="module" src="js/main.js"></script>
   <div id="selector" class="selector" style="display: none;"></div>
-  <script type="module" src="js/main.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+  if (window.innerWidth <= 768) {
+    document.body.innerHTML = "<div style='text-align:center; padding:2em; font-family:sans-serif;'><h2>Este generador solo es compatible con navegadores de PC.</h2><p>Por favor, accede desde un dispositivo con pantalla más grande.</p></div>";
+  }
+</script>
+
+
+<script>
+  const inputTitulo = document.getElementById('tituloInput');
+  const tituloTabla = document.getElementById('tituloTabla');
+
+  inputTitulo.addEventListener('input', () => {
+    tituloTabla.textContent = inputTitulo.value;
+  });
+</script>
+
 </body>
 </html>
 
